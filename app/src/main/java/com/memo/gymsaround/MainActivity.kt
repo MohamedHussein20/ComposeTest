@@ -16,10 +16,9 @@ import com.memo.gymsaround.ui.theme.GymsAroundTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
-            GymsAroundTheme {
                 GymScreen()
-            }
         }
     }
 }
