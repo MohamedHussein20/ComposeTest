@@ -4,12 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material3.CardColors
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,17 +19,16 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.memo.test.ui.theme.Gym
 import com.memo.test.ui.theme.darkerPurple80
-import com.memo.test.ui.theme.listOfGyms
 
 @Composable
 fun GymScreen() {
-    Column( Modifier
-        .padding(all = 8.dp) // Add padding here
-        .verticalScroll(rememberScrollState())) {
-        listOfGyms.forEach{
-            GymItem(it)
+    val vm: GymsViewModel = viewModel()
+    LazyColumn {
+        items(vm.getGyms()){ gym ->
+            GymItem(gym)
         }
     }
 }
