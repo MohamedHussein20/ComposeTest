@@ -1,5 +1,6 @@
 package com.memo.test
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -34,7 +35,7 @@ import com.memo.test.ui.theme.darkerPurple80
 fun GymScreen() {
     val vm: GymsViewModel = viewModel()
     LazyColumn {
-        items(vm.getGyms()){ gym ->
+        items(vm.getGyms()) { gym ->
             GymItem(gym)
         }
     }
@@ -42,59 +43,60 @@ fun GymScreen() {
 
 @Composable
 fun GymItem(gym: Gym) {
-    ElevatedCard(modifier = Modifier.padding(all = 8.dp),
-       //colors = CardDefaults.elevatedCardColors(containerColor = Color.Blue)
+    var isFavoriteState by remember { mutableStateOf(false) }
+    val icon = if (isFavoriteState) {
+        Icons.Filled.Favorite
+    } else {
+        Icons.Filled.FavoriteBorder
+    }
+    ElevatedCard(
+        modifier = Modifier.padding(all = 8.dp),
+        //colors = CardDefaults.elevatedCardColors(containerColor = Color.Blue)
     ) {
         Row(
             Modifier.padding(all = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            GymIcon(Icons.Filled.Place, modifier = Modifier.weight(0.15f))
+            DefaultIcon(modifier = Modifier.weight(0.15f), Icons.Filled.Place, "Location Icon")
             GymDetails(gym, modifier = Modifier.weight(0.70f))
-            FavoriteIcon(Modifier.weight(0.15f))
+            DefaultIcon(Modifier.weight(0.15f), icon, "Favorite Gym Icon") {
+                isFavoriteState = !isFavoriteState
+            }
         }
     }
 }
 
 @Composable
-fun FavoriteIcon(modifier: Modifier) {
-    var isFavoriteState by remember{ mutableStateOf(false) }
-    val icon = if (isFavoriteState){
-        Icons.Filled.Favorite
-    }
-    else{
-        Icons.Filled.FavoriteBorder
-    }
+fun DefaultIcon(
+    modifier: Modifier,
+    icon: ImageVector,
+    contentDescription: String,
+    onClick: () -> Unit = {}
+) {
     Image(
         imageVector = icon,
-        contentDescription = "Favourite Gym Icon",
-        modifier = modifier.padding(0.dp).clickable {
-            isFavoriteState = !isFavoriteState
-        }
-    )
-}
-
-
-@Composable
-fun GymIcon(place: ImageVector, modifier: Modifier) {
-    Image(
-        imageVector = place,
-        contentDescription = "Gym Icon",
-        modifier = modifier,
+        contentDescription = contentDescription,
+        modifier = modifier
+            .padding(0.dp)
+            .clickable {
+                onClick()
+            },
         colorFilter = ColorFilter.tint(
             Color.DarkGray
         )
     )
 }
 
+
 @Composable
 fun GymDetails(gym: Gym, modifier: Modifier) {
-    Column (modifier = Modifier){
+    Column(modifier = Modifier) {
         Text(
             fontSize = 24.sp,
             text = gym.name,
             style = MaterialTheme.typography.bodyLarge,
-            color = darkerPurple80)
+            color = darkerPurple80
+        )
 
         Text(
             text = gym.place,
