@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.memo.test"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.memo.test"
@@ -50,7 +50,7 @@ android {
 }
 
 dependencies {
-
+    tasks.register("prepareKotlinBuildScriptModel"){}
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
