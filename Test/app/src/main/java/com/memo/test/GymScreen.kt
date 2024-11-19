@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,16 +36,18 @@ import com.memo.test.ui.theme.darkerPurple80
 fun GymScreen() {
     val vm: GymsViewModel = viewModel()
     LazyColumn {
-        items(vm.getGyms()) { gym ->
-            GymItem(gym)
+        items(vm.state) { gym ->
+            GymItem(gym) {
+                vm.toggleFavoriteState(it)
+            }
         }
     }
 }
 
 @Composable
-fun GymItem(gym: Gym) {
+fun GymItem(gym: Gym, onClick: (Int) -> Unit) {
     var isFavoriteState by remember { mutableStateOf(false) }
-    val icon = if (isFavoriteState) {
+    val icon = if (gym.isFavorite) {
         Icons.Filled.Favorite
     } else {
         Icons.Filled.FavoriteBorder
@@ -60,7 +63,7 @@ fun GymItem(gym: Gym) {
             DefaultIcon(modifier = Modifier.weight(0.15f), Icons.Filled.Place, "Location Icon")
             GymDetails(gym, modifier = Modifier.weight(0.70f))
             DefaultIcon(Modifier.weight(0.15f), icon, "Favorite Gym Icon") {
-                isFavoriteState = !isFavoriteState
+                onClick(gym.id)
             }
         }
     }
